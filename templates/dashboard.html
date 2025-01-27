@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard: ' + text);
+            }).catch(err => {
+                alert('Failed to copy text: ' + err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Password Manager</h1>
+    <form method="post">
+        <label>Action:</label>
+        <select name="action">
+            <option value="generate">Generate Password</option>
+            <option value="edit">Edit Password</option>
+        </select><br><br>
+        <label>Name:</label><br>
+        <input type="text" name="name" required><br><br>
+        <label>Website:</label><br>
+        <input type="text" name="website" required><br><br>
+        <label>New Password (if editing):</label><br>
+        <input type="text" name="new_password"><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Stored Passwords:</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Website</th>
+            <th>Password</th>
+            <th>Actions</th>
+        </tr>
+        {% for entry in passwords %}
+        <tr>
+            <td>{{ entry.name }}</td>
+            <td>{{ entry.website }}</td>
+            <td>{{ entry.password }}</td>
+            <td>
+                <button onclick="copyToClipboard('{{ entry.password }}')">Copy</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
